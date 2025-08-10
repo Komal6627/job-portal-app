@@ -1,7 +1,7 @@
 import { SignIn } from "@clerk/nextjs"
 
-export default function SignIn() {
+export default function SignInPage() {
     return(
-        <SignIn></SignIn>
+        <SignIn/>
     )
 }
