@@ -25,11 +25,20 @@ function OnBoard() {
   }
 
   const currentAuthUser = useUser();
+  const {user} = currentAuthUser;
   console.log(currentAuthUser);
   
 
   async function createProfileAction(){
-      // const data = 
+      const data = {
+        recruiterFormInfo : recruiterFormData,
+        role : 'recruiter',
+        isPremiumUser : false,
+        userId : user?.id,
+        email : user?.primaryEmailAddress?.emailAddress,
+        
+      }
+      await createProfileAction(data, '/onboard');
   }
 
   return (

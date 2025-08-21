@@ -24,7 +24,6 @@ export const initialRecruiterFormData = {
     name: "",
     companyName: "",
     companyRole : "",
-    isPremium : ""
 }
 
 export const candidateFormControls = [
