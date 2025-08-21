@@ -18,9 +18,7 @@ async function OnBoardPage() {
     } else return <OnBoard/>
 
 
-    // return (
-    //     <OnBoard/>
-//)
+
 }
 
 export default OnBoardPage
