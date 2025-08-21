@@ -12,7 +12,7 @@ export async function createProfile(formData, pathToRevalidate) {
     revalidatePath(pathToRevalidate);    
 }
 
-export async function fetchProfileAction() {
+export async function fetchProfileAction(id) {
     await connectToDB();
     const result = await Profile.findOne({userId : id})
 
