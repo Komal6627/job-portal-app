@@ -139,3 +139,59 @@ export const initialCandidateFormData = {
 };
 
 
+export const PostNewJobFormControls = [
+    {
+        label : 'Company Name',
+        name : 'companyName',
+        placeholder: 'Compnay Name',
+        componentType : 'input'
+    },
+    {
+        label : 'Title',
+        name : 'title',
+        placeholder: 'Job Title',
+        componentType : 'input'
+    },
+    {
+        label : 'Type',
+        name : 'type',
+        placeholder: 'Job Type',
+        componentType : 'input'
+    },
+    {
+        label : 'Location',
+        name : 'location',
+        placeholder: 'Job Location',
+        componentType : 'input'
+    },
+    {
+        label : 'Experience',
+        name : 'experience',
+        placeholder: 'Experience',
+        componentType : 'input'
+    },
+    {
+        label : 'Description',
+        name : 'description',
+        placeholder: 'Job Desciption',
+        componentType : 'input'
+    },
+    {
+        label : 'Skills',
+        name : 'skills',
+        placeholder: 'Skills',
+        componentType : 'input'
+    },
+]
+
+export const PostNewJobFormData = {
+    companyName : '',
+    title : '',
+    type : '',
+    location : '',
+    experience : '',
+    description : '',
+    skills : ''
+}
+
+
