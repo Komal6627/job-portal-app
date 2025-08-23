@@ -4,7 +4,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useState } from "react";
 import CommonForm from "../common-form";
 import { recruiterOnboardFormControls, initialRecruiterFormData, candidateFormControls, initialCandidateFormData } from "@/utils";
-import { createProfile } from "@/actions";
+import { createProfile, createProfileAction } from "@/actions";
 import { useUser } from "@clerk/nextjs";
 
 
@@ -29,7 +29,7 @@ function OnBoard() {
   console.log(currentAuthUser);
   
 
-  async function createProfileAction(){
+  async function createProfile(){
       const data = {
         recruiterFormInfo : recruiterFormData,
         role : 'recruiter',
@@ -80,7 +80,7 @@ function OnBoard() {
            formData={ recruiterFormData}
            setFormData={setRecruiterFormData}
            isBtnDisabled={!handleRecruiterFormValid()}
-           action={createProfileAction}
+           action={createProfile}
            />
         </TabsContent >
       </Tabs>

@@ -5,7 +5,7 @@ import Profile from "@/models/profile";
 import { revalidatePath } from "next/cache";
 
 //create profile  action
-export async function createProfile(formData, pathToRevalidate) {
+export async function createProfileAction(formData, pathToRevalidate) {
     await connectToDB();
     await Profile.create(formData);
 
