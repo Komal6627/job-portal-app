@@ -139,12 +139,13 @@ export const initialCandidateFormData = {
 };
 
 
-export const PostNewJobFormControls = [
+export const postNewJobFormControls = [
     {
         label : 'Company Name',
         name : 'companyName',
-        placeholder: 'Compnay Name',
-        componentType : 'input'
+        placeholder: 'Company Name',
+        componentType : 'input',
+        disabled : true
     },
     {
         label : 'Title',
@@ -184,7 +185,7 @@ export const PostNewJobFormControls = [
     },
 ]
 
-export const PostNewJobFormData = {
+export const initialPostNewJobFormData = {
     companyName : '',
     title : '',
     type : '',

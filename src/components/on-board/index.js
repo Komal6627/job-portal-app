@@ -31,7 +31,7 @@ function OnBoard() {
 
   async function createProfile(){
       const data = {
-        recruiterFormInfo : recruiterFormData,
+        recruiterInfo : recruiterFormData,
         role : 'recruiter',
         isPremiumUser : false,
         userId : user?.id,
