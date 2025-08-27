@@ -16,9 +16,6 @@ async function OnBoardPage() {
         if(profileInfo?.role === 'recruiter' && !profileInfo.isPremiumUser) redirect('/membership')
             else redirect('/')
     } else return <OnBoard/>
-
-
-
 }
 
 export default OnBoardPage

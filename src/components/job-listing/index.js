@@ -2,7 +2,8 @@
 
 import PostNewJob from "../post-new-job"
 
-function JobListing({user, profileInfo}) {
+function JobListing({user, profileInfo, jobList}) {
+    console.log(jobList, "joblist client") 
     return(
        <div>
             <div className="max-auto max-w-7xl">
@@ -14,7 +15,7 @@ function JobListing({user, profileInfo}) {
                     </h1>
                     <div className="flex items-center">
                         {
-                            profileInfo?.role === 'candidate' ? <p>Filter</p>: <PostNewJob profileInfo={profileInfo}/>
+                            profileInfo?.role === 'candidate' ? <p>Filter</p>: <PostNewJob user={user} profileInfo={profileInfo}/>
                         }
                     </div>
                 </div>

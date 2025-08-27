@@ -1,14 +1,20 @@
-import { fetchProfileAction } from "@/actions";
+import { fetchJobforRecruiterAction, fetchProfileAction } from "@/actions";
 import JobListing from "@/components/job-listing"
 import { currentUser } from "@clerk/nextjs/server"
 
 async function JobsPage(params) {
     const user = await currentUser();
     const profileInfo = await fetchProfileAction(user?.id)
+
+    const jobList = await fetchJobforRecruiterAction(user?.id)
+ 
+    console.log(jobList, "joblist server");
+    
     return(
        <JobListing
             user={JSON.parse(JSON.stringify(user))}
             profileInfo={profileInfo}
+             jobList={JSON.parse(JSON.stringify(jobList))}
             
        />
     )

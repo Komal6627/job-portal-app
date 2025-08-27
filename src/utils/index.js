@@ -85,7 +85,8 @@ export const candidateFormControls = [
         label: 'Total Experience',
         name : 'totalExperience',
         placeholder : 'Enter your total experience',
-        componentType : 'input'
+        componentType : 'input',
+       
     },
     {
         label: 'College',
@@ -175,7 +176,7 @@ export const postNewJobFormControls = [
         label : 'Description',
         name : 'description',
         placeholder: 'Job Desciption',
-        componentType : 'input'
+        componentType: 'textarea'
     },
     {
         label : 'Skills',
