@@ -24,7 +24,7 @@ import {
                     </CardDescription> :null
                 }
             </CardHeader>
-            <CardFooter>{footerContent}</CardFooter>
+            <CardFooter className="p-0">{footerContent}</CardFooter>
     </Card>
   )
 }
