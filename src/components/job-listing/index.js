@@ -1,6 +1,7 @@
 'use client'
 
 import PostNewJob from "../post-new-job"
+import RecruiterJobCard from "../recruiter-job-card"
 
 function JobListing({user, profileInfo, jobList}) {
     console.log(jobList, "joblist client") 
@@ -19,8 +20,23 @@ function JobListing({user, profileInfo, jobList}) {
                         }
                     </div>
                 </div>
-                <div>
-                    Job Listing
+                <div className="pt-6 pb-24">
+                    <div className="grid grid-col-1 gap-y-10 lg:grid-col-3 ">
+                        <div className="lg:col-span-4">
+                            <div className="conatiner  mx-auto p-0 space-y-8">
+                                <div className="grid grid-cols-1 gap-x-4 gap-y-8 md:grid-cols-2 lg:grid-cols-3">
+                                    {
+                                        jobList && jobList.length > 0
+                                        ? jobList.map((jobItem) => 
+                                        profileInfo?.role === "candidate" ? (<p>candidate</p>) : (
+                                            <RecruiterJobCard key={jobItem._id} jobItem={jobItem}/>
+                                        )
+                                        ):null
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
