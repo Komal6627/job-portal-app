@@ -34,8 +34,17 @@ export async function postNewJobAction(formData, pathToRevalidate) {
 
 export async function fetchJobforRecruiterAction(id) {
     await connectToDB();
-  console.log("Fetching jobs for recruiterId:", id);
+//   console.log("Fetching jobs for recruiterId:", id);
   const result = await Job.find({ recruiterId: id });
-  console.log("Result from DB:", result);
+//   console.log("Result from DB:", result);
   return JSON.parse(JSON.stringify(result));
+}
+
+
+export async function fetchJobforCandidateAction() {
+    await connectToDB();
+
+    const result = await Job.find({});
+
+    return JSON.parse(JSON.stringify(result));
 }
