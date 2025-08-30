@@ -41,10 +41,19 @@ function OnBoard() {
   }
 
   async function handleUploadPdfToSupabase() {
-    const {data, error} = await supabaseClient.storage.from('job-board').upload('/public/${file.name}', {
+    const {data, error} = await supabaseClient.storage.from('job-board').upload(`/public/${file.name}`, {
       cacheControl : "3600",
       upsert: false
     })
+    console.log(data, error);
+
+    if (data) {
+      setCandidateFormData({
+        ...candidateFormData,
+        resume: data.path,
+      })
+    }
+    
   };
 
   useEffect(() => {
@@ -52,16 +61,25 @@ function OnBoard() {
       handleUploadPdfToSupabase()
     }
   }, [file])
+
+  function handleCandidateFormValid() {
+    return Object.keys(candidateFormData).every(key => candidateFormData[key].trim() !== '')
+  }
   
 
   async function createProfile(){
-      const data = {
+      const data = currentTab === 'candidate' ? {
+        candidateInfo : candidateFormData,
+        role : 'candidate',
+        isPremiumUser : false,
+        userId : user?.id,
+        email : user?.primaryEmailAddress?.emailAddress,  
+      } : {
         recruiterInfo : recruiterFormData,
         role : 'recruiter',
         isPremiumUser : false,
         userId : user?.id,
-        email : user?.primaryEmailAddress?.emailAddress,
-        
+        email : user?.primaryEmailAddress?.emailAddress,  
       }
       await createProfileAction(data, '/onboard');
   }
@@ -98,11 +116,14 @@ function OnBoard() {
             formData={candidateFormData} 
             setFormData={setCandidateFormData} 
             handleFileChange={handleFileChange}
+            isBtnDisabled={!handleCandidateFormValid()}
+            action={createProfile}
            />
         </TabsContent >
 
         <TabsContent value="recruiter">
-           <CommonForm formControls={recruiterOnboardFormControls} buttonText={'Onboard as recruiter'}
+           <CommonForm formControls={recruiterOnboardFormControls}
+            buttonText={'Onboard as recruiter'}
            formData={ recruiterFormData}
            setFormData={setRecruiterFormData}
            isBtnDisabled={!handleRecruiterFormValid()}
