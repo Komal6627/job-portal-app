@@ -24,7 +24,7 @@ export async function fetchProfileAction(id) {
 export async function postNewJobAction(formData, pathToRevalidate) {
     await connectToDB();
 
-     console.log("Saving job:", formData);
+    //  console.log("Saving job:", formData);
     await Job.create(formData);
 
     revalidatePath(pathToRevalidate)
