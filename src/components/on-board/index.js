@@ -1,11 +1,15 @@
 "use client";
 
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CommonForm from "../common-form";
 import { recruiterOnboardFormControls, initialRecruiterFormData, candidateFormControls, initialCandidateFormData } from "@/utils";
-import { createProfile, createProfileAction } from "@/actions";
+import {  createProfileAction } from "@/actions";
 import { useUser } from "@clerk/nextjs";
+import { createClient } from "@supabase/supabase-js";
+
+const supabaseClient = createClient('https://buswlgtlflujyoslykpt.supabase.co' ,
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ1c3dsZ3RsZmx1anlvc2x5a3B0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYzNzE3OTYsImV4cCI6MjA3MTk0Nzc5Nn0.IQ4zdiOjpDXcgAv7hFb4d7z6vmCbiO9PZEW1Zl3AF-I")
 
 
 function OnBoard() {
@@ -13,6 +17,8 @@ function OnBoard() {
   const [recruiterFormData, setRecruiterFormData] = useState(initialRecruiterFormData)
 
   const [candidateFormData, setCandidateFormData] = useState(initialCandidateFormData)
+
+  const[file, setFile] = useState(null)
 
   function handleTabChange(value) {
     setCurrentTab(value);
@@ -27,6 +33,25 @@ function OnBoard() {
   const currentAuthUser = useUser();
   const {user} = currentAuthUser;
   console.log(currentAuthUser);
+
+  function handleFileChange(event) {
+      event.preventDefault();
+      // console.log(event.target.files, "resume");
+      setFile(event.target.files[0])
+  }
+
+  async function handleUploadPdfToSupabase() {
+    const {data, error} = await supabaseClient.storage.from('job-board').upload('/public/${file.name}', {
+      cacheControl : "3600",
+      upsert: false
+    })
+  };
+
+  useEffect(() => {
+    if (file) {
+      handleUploadPdfToSupabase()
+    }
+  }, [file])
   
 
   async function createProfile(){
@@ -72,6 +97,7 @@ function OnBoard() {
             buttonText={'Onboard as candidate'} 
             formData={candidateFormData} 
             setFormData={setCandidateFormData} 
+            handleFileChange={handleFileChange}
            />
         </TabsContent >
 
