@@ -8,8 +8,7 @@ import {  createProfileAction } from "@/actions";
 import { useUser } from "@clerk/nextjs";
 import { createClient } from "@supabase/supabase-js";
 
-const supabaseClient = createClient('https://buswlgtlflujyoslykpt.supabase.co' ,
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ1c3dsZ3RsZmx1anlvc2x5a3B0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYzNzE3OTYsImV4cCI6MjA3MTk0Nzc5Nn0.IQ4zdiOjpDXcgAv7hFb4d7z6vmCbiO9PZEW1Zl3AF-I")
+const supabaseClient = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL , NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY)
 
 
 function OnBoard() {
