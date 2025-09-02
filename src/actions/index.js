@@ -48,3 +48,4 @@ export async function fetchJobforCandidateAction() {
 
     return JSON.parse(JSON.stringify(result));
 }
+
