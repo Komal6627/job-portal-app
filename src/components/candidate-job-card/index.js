@@ -38,13 +38,16 @@ function CandidateJobCard({ jobItem }) {
         <DrawerContent className="p-6">
           <DrawerHeader className="px-0">
             <div className="flex justify-between">
-              <div className="flex items-baseline gap-2">
+              <div>
                 <DrawerTitle className="text-4xl font-extrabold text-gray-800">
                   {jobItem?.title}
                 </DrawerTitle>
-                <span className="text-xl font-medium text-gray-500">
-                  {jobItem?.location}
-                </span>
+
+                <div className="mt-2 flex items-center gap-2 text-lg text-gray-600">
+                  <span>{jobItem?.location}</span>
+                  <span>• {jobItem?.type}</span>
+                  <span>• {jobItem?.experience} year</span>
+                </div>
               </div>
 
               <div className="flex-gap-3">
@@ -60,9 +63,19 @@ function CandidateJobCard({ jobItem }) {
               </div>
             </div>
           </DrawerHeader>
-          <DrawerDescription className="text-xl font-normal text-gray-800">
+          <div>
+            <h1 className="text-xl font-semibold">Skills</h1>
+            <div className="flex gap-4 mt-1">
+              {jobItem?.skills.split(",").map((skillItem) => (
+                <h2 className="text-lg font-normal">{skillItem}</h2>
+              ))}
+            </div>
+          </div>
+
+          <DrawerDescription className="text-xl font-normal text-gray-800 mt-6">
             {jobItem?.description}
           </DrawerDescription>
+          <div></div>
         </DrawerContent>
       </Drawer>
     </Fragment>
