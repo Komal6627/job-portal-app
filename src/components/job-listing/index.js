@@ -4,7 +4,7 @@ import CandidateJobCard from "../candidate-job-card"
 import PostNewJob from "../post-new-job"
 import RecruiterJobCard from "../recruiter-job-card"
 
-function JobListing({user, profileInfo, jobList}) {
+function JobListing({user, profileInfo, jobList, jobApplications}) {
     console.log(jobList, "joblist client") 
     return(
        <div>
