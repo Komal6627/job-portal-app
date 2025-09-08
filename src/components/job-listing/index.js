@@ -5,7 +5,7 @@ import PostNewJob from "../post-new-job"
 import RecruiterJobCard from "../recruiter-job-card"
 
 function JobListing({user, profileInfo, jobList, jobApplications}) {
-    console.log(jobList, "joblist client") 
+    console.log(jobApplications, "jobappliactions") 
     return(
        <div>
             <div className="max-auto max-w-7xl">
@@ -30,9 +30,17 @@ function JobListing({user, profileInfo, jobList, jobApplications}) {
                                         jobList && jobList.length > 0
                                         ? jobList.map((jobItem, index) => 
                                         profileInfo?.role === "candidate" ? (
-                                            <CandidateJobCard  key={jobItem._id || index} jobItem={jobItem}/>
+                                            <CandidateJobCard 
+                                            profileInfo={profileInfo}
+                                            key={jobItem._id || index} jobItem={jobItem} 
+                                            jobApplications = {jobApplications}
+                                            />
                                         ) : (
-                                            <RecruiterJobCard key={jobItem._id || index} jobItem={jobItem}/>
+                                            <RecruiterJobCard 
+                                            profileInfo={profileInfo} 
+                                            key={jobItem._id || index} jobItem={jobItem}
+                                            jobApplications = {jobApplications}
+                                            />
                                         )
                                         ):null
                                     }

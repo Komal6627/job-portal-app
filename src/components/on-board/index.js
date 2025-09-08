@@ -8,7 +8,7 @@ import {  createProfileAction } from "@/actions";
 import { useUser } from "@clerk/nextjs";
 import { createClient } from "@supabase/supabase-js";
 
-const supabaseClient = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL , NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY)
+const supabaseClient = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL,process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY)
 
 
 function OnBoard() {
@@ -40,10 +40,13 @@ function OnBoard() {
   }
 
   async function handleUploadPdfToSupabase() {
-    const {data, error} = await supabaseClient.storage.from('job-board').upload(`/public/${file.name}`, {
-      cacheControl : "3600",
-      upsert: false
-    })
+  const { data, error } = await supabaseClient
+  .storage
+  .from('job-board-app')
+  .upload(`public/${file.name}`, file, {
+    cacheControl: "3600",
+    upsert: false
+  });
     console.log(data, error);
 
     if (data) {
@@ -52,8 +55,18 @@ function OnBoard() {
         resume: data.path,
       })
     }
+
+
+//     if (error) {
+//   console.error("Upload error:", error);
+// } else {
+//   console.log("Upload success:", data);
+// }
     
   };
+
+  
+
 
   useEffect(() => {
     if (file) {
@@ -61,9 +74,31 @@ function OnBoard() {
     }
   }, [file])
 
+  // function handleCandidateFormValid() {
+  //   return Object.keys(candidateFormData).every(key => candidateFormData[key].trim() !== '')
+
+    
+  // }
+
+
   function handleCandidateFormValid() {
-    return Object.keys(candidateFormData).every(key => candidateFormData[key].trim() !== '')
-  }
+  return Object.keys(candidateFormData).every(key => {
+    const value = candidateFormData[key];
+
+    // If it's a string → must not be empty
+    if (typeof value === "string") {
+      return value.trim() !== "";
+    }
+
+    // If it's a file or path (resume) → just make sure it exists
+    if (key === "resume") {
+      return value !== null && value !== "";
+    }
+
+    return true;
+  });
+}
+
   
 
   async function createProfile(){

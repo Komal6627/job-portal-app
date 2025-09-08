@@ -52,7 +52,7 @@ export async function fetchJobforCandidateAction() {
 
 
 //create job application
-export async function createJobApplication(data, pathToRevalidate) {
+export async function createJobApplicationAction(data, pathToRevalidate) {
     await connectToDB();
     await Application.create(data);
     revalidatePath(pathToRevalidate);
@@ -60,18 +60,20 @@ export async function createJobApplication(data, pathToRevalidate) {
 
 
 //fetch job application - candidate
-export async function fetchJobApplicationForCandidate(candidateId) {
-    await connectToDB();
-    const result = await Application.find({candidateId: candidateId})
-    return JSON.parse(JSON.stringify(result));
+export async function fetchJobApplicationForCandidate(userId) {
+  console.log("Querying with candidateUserId:", userId);
+  const applications = await Application.find({ candidateUserId: userId });
+  console.log("Applications fetched:", applications);
+  return applications;
 }
+
 
 
 //fetch job application - recruiter
 
-export async function fetchJobApplicationForRecruiter(recruiterId) {
+export async function fetchJobApplicationForRecruiter(recruiterUserId) {
     await connectToDB();
-    const result = await Application.find({recruiterUserID : recruiterId})
+    const result = await Application.find({recruiterUserId})
     return JSON.parse(JSON.stringify(result));
 }
 

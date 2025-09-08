@@ -12,9 +12,25 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "../ui/drawer";
+import { createJobApplicationAction } from "@/actions";
 
-function CandidateJobCard({ jobItem }) {
+function CandidateJobCard({ jobItem, profileInfo, jobApplications }) {
   const [showJobDetailsDrawer, setShowJobDetailsDrawer] = useState(false);
+  console.log(jobApplications, "jobapp");
+  
+
+  async function handleJobApply() {
+    await createJobApplicationAction({
+      recruiterUserId: jobItem?.recruiterId,
+      name: profileInfo?.candidateInfo?.name,
+      email: profileInfo?.email,
+      candidateUserId: profileInfo?.userId,
+      status: ['Applied'],
+      jobId: jobItem?._id,
+      jobAppliedDate: new Date().toLocaleDateString(),
+    },'/jobs');
+    setShowJobDetailsDrawer(false)
+  }
 
   return (
     <Fragment>
@@ -51,8 +67,14 @@ function CandidateJobCard({ jobItem }) {
               </div>
 
               <div className="flex-gap-3">
-                <Button className="disabled:opacity-60  px-5 bg-violet-600 text:white hover:bg-violet-700 m-1">
-                  Apply
+                <Button
+                  onClick={handleJobApply}
+                  disabled={
+                    jobApplications.findIndex(item=> item.jobId === jobItem?._id) > -1 ? true : false
+                  }
+                  className="disabled:opacity-60  px-5 bg-violet-600 text:white hover:bg-violet-700 m-1"
+                >
+                  { jobApplications.findIndex(item=> item.jobId === jobItem?._id) > -1 ? "Applied" : "Apply" }
                 </Button>
                 <Button
                   className="disabled:opacity-60  px-5 bg-violet-600 text:white hover:bg-violet-700 m-1"
@@ -66,8 +88,8 @@ function CandidateJobCard({ jobItem }) {
           <div>
             <h1 className="text-xl font-semibold">Skills</h1>
             <div className="flex gap-4 mt-1">
-              {jobItem?.skills.split(",").map((skillItem) => (
-                <h2 className="text-lg font-normal">{skillItem}</h2>
+              {jobItem?.skills.split(",").map((skillItem, index) => (
+                <h2 key={`${skillItem}-${index}`}  className="text-lg font-normal">{skillItem}</h2>
               ))}
             </div>
           </div>
