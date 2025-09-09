@@ -23,7 +23,7 @@ function OnBoard() {
     setCurrentTab(value);
   }
 
-  console.log(recruiterFormData,'recruter form data');
+  // console.log(recruiterFormData,'recruter form data');
   
   function handleRecruiterFormValid() {
       return recruiterFormData && recruiterFormData.name.trim() !== '' && recruiterFormData.companyName !== '' &&  recruiterFormData.companyRole.trim() !== ''
@@ -31,7 +31,7 @@ function OnBoard() {
 
   const currentAuthUser = useUser();
   const {user} = currentAuthUser;
-  console.log(currentAuthUser);
+  // console.log(currentAuthUser);
 
   function handleFileChange(event) {
       event.preventDefault();

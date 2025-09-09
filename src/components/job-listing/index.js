@@ -5,7 +5,7 @@ import PostNewJob from "../post-new-job"
 import RecruiterJobCard from "../recruiter-job-card"
 
 function JobListing({user, profileInfo, jobList, jobApplications}) {
-    console.log(jobApplications, "jobappliactions") 
+    // console.log(jobApplications, "jobappliactions") 
     return(
        <div>
             <div className="max-auto max-w-7xl">

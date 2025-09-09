@@ -4,6 +4,7 @@ import { useState } from "react";
 import CommonCard from "../common-card"
 import JobIcon from "../job-icon"
 import { Button } from "../ui/button"
+import JobApplications from "../job-applicants";
 
 function RecruiterJobCard({jobItem, jobApplications}) {
     console.log(jobApplications, "jobApplications for recruiter");
@@ -26,6 +27,17 @@ function RecruiterJobCard({jobItem, jobApplications}) {
                      {applicantCount} Applicants
                 </Button>
             } />
+
+            <JobApplications
+                showApplicantsDrawer={showApplicantsDrawer}
+                setShowApplicantsDrawer={setShowApplicantsDrawer}
+                showCurrentCandidateDetailsModal={showCurrentCandidateDetailsModal}
+                setShowCurrentCandidateDetailsModal={setShowCurrentCandidateDetailsModal}
+                currentCandidateDetails={currentCandidateDetails}
+                setCurrentCandidateDetails={setCurrentCandidateDetails}
+                jobItem={jobItem}
+                jobApplications={jobApplications.filter(jobApplicantItem.jobId === jobItem?._id)}
+            />
         </div>
     )
 }
