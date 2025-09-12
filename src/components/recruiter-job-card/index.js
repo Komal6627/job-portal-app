@@ -20,7 +20,7 @@ function RecruiterJobCard({ jobItem, jobApplications }) {
     (item) => item.jobId === jobItem?._id.toString()
   ).length;
 
-  console.log("Final applicantCount:", applicantCount);
+  // console.log("Final applicantCount:", applicantCount);
 
   return (
     <div>
