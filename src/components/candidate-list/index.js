@@ -11,21 +11,19 @@ function CandidateList({
   showCurrentCandidateDetailsModal,
   setShowCurrentCandidateDetailsModal,
 }) {
+  async function handleFetchCandidateDetails(getCurrentCandidateId) {
+    const data = await getCandidateDetailsByIdAction(getCurrentCandidateId);
 
-    async function handleFetchCandidateDetails(getCurrentCandidateId){
-        const data = await getCandidateDetailsByIdAction(getCurrentCandidateId);
+    console.log(data);
 
-        console.log(data);
-
-        if (data) {
-            setCurrentCandidateDetails(data)
-            setShowCurrentCandidateDetailsModal(true)
-        }
-        
+    if (data) {
+      setCurrentCandidateDetails(data);
+      setShowCurrentCandidateDetailsModal(true);
     }
+  }
 
-    console.log(currentCandidateDetails);
-    
+  console.log(currentCandidateDetails);
+
   return (
     <>
       <div className="grid grid-cols-1 gap-3 p-10 md:grid-cols-2 lg:grid-cols-3">
@@ -38,7 +36,11 @@ function CandidateList({
                 <div className="px-4 my-6 flex justify-between items-center">
                   <h3>{jobApplicantItem?.name}</h3>
                   <Button
-                    onClick={() => handleFetchCandidateDetails(jobApplicantItem?.candidateUserId)}
+                    onClick={() =>
+                      handleFetchCandidateDetails(
+                        jobApplicantItem?.candidateUserId
+                      )
+                    }
                     className="disabled:opacity-60 flex h-11 items-center justify-center px-5 bg-violet-600 text:white hover:bg-violet-700"
                   >
                     View Profile
@@ -50,28 +52,74 @@ function CandidateList({
       </div>
       <Dialog
         open={showCurrentCandidateDetailsModal}
-        onOpenChange={() =>{ setShowCurrentCandidateDetailsModal(null);setShowCurrentCandidateDetailsModal(false)} }
+        onOpenChange={() => {
+          setShowCurrentCandidateDetailsModal(null);
+          setShowCurrentCandidateDetailsModal(false);
+        }}
       >
-        <DialogContent>
-          {/* <DialogTitle>Candidate Details</DialogTitle> */}
+        <DialogContent className="max-w-lg p-6 rounded-2xl shadow-xl bg-white">
+          <DialogTitle className="sr-only">Candidate Details</DialogTitle>
 
-          <div className="text-lg font-medium">
-            <h1 >Name :- {currentCandidateDetails?.candidateInfo?.name}</h1>
-            <h1>Email :-  {currentCandidateDetails?.email}</h1>
-            <p>Current Company :- {currentCandidateDetails?.candidateInfo.currentCompany}</p>
-            <p>Current Job Location :- {currentCandidateDetails?.candidateInfo.currentJobLocation}</p>
-            <p>Total Experience:- {currentCandidateDetails?.candidateInfo.totalExperience } Years</p>
-            <p>Salary:- {currentCandidateDetails?.candidateInfo.currentSalary}</p>
-            <p>Notice Period:- {currentCandidateDetails?.candidateInfo.noticePeriod} Days</p>
-            <div className="flex gap-4 mt-1 text-lg">
-           Previous Companies:-  {currentCandidateDetails?.candidateInfo?.previousCompany.split(",").map((previousCompany, index) => (
-               <h2 key={`${previousCompany}-${index}`}  >{previousCompany}</h2>
-              ))}
+          <div className="mb-4 border-b pb-3">
+            <h1 className="text-2xl font-bold text-gray-900">
+              {currentCandidateDetails?.candidateInfo?.name}
+            </h1>
+            <p className="text-gray-600">{currentCandidateDetails?.email}</p>
+          </div>
+
+          <div className="space-y-3 text-gray-800">
+            <p>
+              <span className="font-semibold">Current Company:</span>{" "}
+              {currentCandidateDetails?.candidateInfo.currentCompany}
+            </p>
+            <p>
+              <span className="font-semibold">Job Location:</span>{" "}
+              {currentCandidateDetails?.candidateInfo.currentJobLocation}
+            </p>
+            <p>
+              <span className="font-semibold">Experience:</span>{" "}
+              {currentCandidateDetails?.candidateInfo.totalExperience} Years
+            </p>
+            <p>
+              <span className="font-semibold">Salary:</span>{" "}
+              {currentCandidateDetails?.candidateInfo.currentSalary}
+            </p>
+            <p>
+              <span className="font-semibold">Notice Period:</span>{" "}
+              {currentCandidateDetails?.candidateInfo.noticePeriod} Days
+            </p>
+          </div>
+
+          <div className="mt-4">
+            <h2 className="text-lg font-semibold mb-2">Previous Companies</h2>
+            <div className="flex flex-wrap gap-2">
+              {(currentCandidateDetails?.candidateInfo?.previousCompanies ?? "")
+                .split(",")
+                .filter(Boolean)
+                .map((previousCompany, index) => (
+                  <span
+                    key={`${previousCompany}-${index}`}
+                    className="px-3 py-1 bg-gray-100 rounded-full text-sm text-gray-700"
+                  >
+                    {previousCompany}
+                  </span>
+                ))}
             </div>
-             <div className="flex gap-4 mt-1 text-lg">
-           Skills:-  {currentCandidateDetails?.candidateInfo?.skills.split(",").map((skillItem, index) => (
-               <h2 key={`${skillItem}-${index}`}  >{skillItem}</h2>
-              ))}
+          </div>
+
+          <div className="mt-4">
+            <h2 className="text-lg font-semibold mb-2">Skills</h2>
+            <div className="flex flex-wrap gap-2">
+              {currentCandidateDetails?.candidateInfo?.skills
+                .split(",")
+                .map((skillItem, index) => (
+                  <span
+                    key={`${skillItem}-${index}`}
+                    className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium"
+                  >
+                    {skillItem}
+                  </span>
+                ))}
             </div>
           </div>
         </DialogContent>

@@ -21,7 +21,7 @@ const ProfileSchema = new mongoose.Schema({
         noticePeriod : String,
         skills : String,
         currentCompany : String,
-        previousCompany :String,
+        previousCompanies :String,
         totalExperience : String,
         college : String,
         collegeLocation : String,

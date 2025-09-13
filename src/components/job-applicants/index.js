@@ -1,7 +1,7 @@
 'use client'
 
 import CandidateList from "../candidate-list"
-import { Drawer, DrawerContent } from "../ui/drawer"
+import { Drawer, DrawerContent, DrawerTitle } from "../ui/drawer"
 import { ScrollArea } from "../ui/scroll-area"
 
 
@@ -9,6 +9,7 @@ function JobApplications({showApplicantsDrawer, setShowApplicantsDrawer, showCur
     return(
         <Drawer open={showApplicantsDrawer} onOpenChange={setShowApplicantsDrawer}>
             <DrawerContent className="max-h-[50vh]">
+                <DrawerTitle className="sr-only">Candidate Details</DrawerTitle>
                 <ScrollArea className="h-auto overflow-y-auto">
                     <CandidateList 
                         currentCandidateDetails = {currentCandidateDetails}

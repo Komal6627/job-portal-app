@@ -85,12 +85,20 @@ function CandidateJobCard({ jobItem, profileInfo, jobApplications }) {
               </div>
             </div>
           </DrawerHeader>
-          <div>
-            <h1 className="text-xl font-semibold">Skills</h1>
-            <div className="flex gap-4 mt-1">
-              {jobItem?.skills.split(",").map((skillItem, index) => (
-                <h2 key={`${skillItem}-${index}`}  className="text-lg font-normal">{skillItem}</h2>
-              ))}
+
+            <div className="mt-4">
+            <h2 className="text-lg font-semibold mb-2">Skills</h2>
+            <div className="flex flex-wrap gap-2">
+              {jobItem?.skills
+                .split(",")
+                .map((skillItem, index) => (
+                  <span
+                    key={`${skillItem}-${index}`}
+                    className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium"
+                  >
+                    {skillItem}
+                  </span>
+                ))}
             </div>
           </div>
 
