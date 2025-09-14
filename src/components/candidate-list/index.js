@@ -40,7 +40,22 @@ function CandidateList({
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
-    console.log(data, 'resume');
+    // console.log(data, 'resume');
+  }
+
+  async function handleUpdateJobStatus(getCurrentStatus) {
+    let cpyJobApplicants = [...jobApplications];
+    const indexOfCurrentJobApplicant = cpyJobApplicants.findIndex(item =>item.candidateUserId === currentCandidateDetails?.userId);
+
+    console.log(indexOfCurrentJobApplicant);
+    const jobApplicantsToUpdate = {
+      ...cpyJobApplicants[indexOfCurrentJobApplicant],
+      status : cpyJobApplicants[indexOfCurrentJobApplicant].status.concat(getCurrentStatus)
+    }
+
+    console.log(jobApplicantsToUpdate, "jobApplicantsToUpdate");
+    
+    
   }
 
   return (
@@ -146,8 +161,8 @@ function CandidateList({
               <Button onClick={handlePreviewResume}  className="disabled:opacity-60 flex h-11 items-center justify-center px-5 bg-violet-600 text:white hover:bg-violet-700">
                 Resume
               </Button>
-              <Button>Select</Button>
-              <Button>Reject</Button>
+              <Button className="disabled:opacity-60 flex h-11 items-center justify-center px-5 bg-violet-600 text:white hover:bg-violet-700" onClick={() => handleUpdateJobStatus('selected')} >Select</Button>
+              <Button className="disabled:opacity-60 flex h-11 items-center justify-center px-5 bg-violet-600 text:white hover:bg-violet-700" onClick={() => handleUpdateJobStatus('rejected')}>Reject</Button>
           </div>
         </DialogFooter>
         </DialogContent>
