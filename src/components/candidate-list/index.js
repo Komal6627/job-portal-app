@@ -2,7 +2,12 @@
 
 import { getCandidateDetailsByIdAction } from "@/actions";
 import { Button } from "../ui/button";
-import { Dialog, DialogContent, DialogTitle } from "../ui/dialog";
+import { Dialog, DialogContent, DialogFooter, DialogTitle } from "../ui/dialog";
+import { createClient } from "@supabase/supabase-js";
+
+
+const supabaseClient = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL,process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY)
+
 
 function CandidateList({
   jobApplications,
@@ -14,7 +19,7 @@ function CandidateList({
   async function handleFetchCandidateDetails(getCurrentCandidateId) {
     const data = await getCandidateDetailsByIdAction(getCurrentCandidateId);
 
-    console.log(data);
+    // console.log(data);
 
     if (data) {
       setCurrentCandidateDetails(data);
@@ -23,6 +28,20 @@ function CandidateList({
   }
 
   console.log(currentCandidateDetails);
+
+  function handlePreviewResume() {
+    const {data} = supabaseClient.storage.from('job-board-app').getPublicUrl(currentCandidateDetails?.candidateInfo?.resume);
+
+    const a = document.createElement('a');
+
+    a.href = data?.publicUrl;
+    a.setAttribute("download", "Resume.pdf");
+    a.setAttribute("target", "_blank");
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    console.log(data, 'resume');
+  }
 
   return (
     <>
@@ -122,7 +141,17 @@ function CandidateList({
                 ))}
             </div>
           </div>
+           <DialogFooter>
+          <div className="flex gap-3">
+              <Button onClick={handlePreviewResume}  className="disabled:opacity-60 flex h-11 items-center justify-center px-5 bg-violet-600 text:white hover:bg-violet-700">
+                Resume
+              </Button>
+              <Button>Select</Button>
+              <Button>Reject</Button>
+          </div>
+        </DialogFooter>
         </DialogContent>
+       
       </Dialog>
     </>
   );
