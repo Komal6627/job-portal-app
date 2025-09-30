@@ -5,7 +5,7 @@ import { Drawer, DrawerContent, DrawerTitle } from "../ui/drawer"
 import { ScrollArea } from "../ui/scroll-area"
 
 
-function JobApplications({showApplicantsDrawer, setShowApplicantsDrawer, showCurrentCandidateDetailsModal, setShowCurrentCandidateDetailsModal, currentCandidateDetails, setCurrentCandidateDetails, jobApplications}) {
+function JobApplications({showApplicantsDrawer, setShowApplicantsDrawer, showCurrentCandidateDetailsModal, setShowCurrentCandidateDetailsModal, currentCandidateDetails, setCurrentCandidateDetails, jobApplications,  setJobApplications}) {
     return(
         <Drawer open={showApplicantsDrawer} onOpenChange={setShowApplicantsDrawer}>
             <DrawerContent className="max-h-[50vh]">
@@ -17,6 +17,7 @@ function JobApplications({showApplicantsDrawer, setShowApplicantsDrawer, showCur
                         jobApplications={jobApplications}
                         showCurrentCandidateDetailsModal={showCurrentCandidateDetailsModal}
                         setShowCurrentCandidateDetailsModal={setShowCurrentCandidateDetailsModal}
+                        setJobApplications={setJobApplications}
                     />
                 </ScrollArea>
             </DrawerContent>

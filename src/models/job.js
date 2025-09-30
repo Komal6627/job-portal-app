@@ -14,7 +14,7 @@ const JobSchema = new mongoose.Schema({
       name: String,
       email: String,
       userId: String,
-      status: String,
+      status: Array,
     },
   ],
 });

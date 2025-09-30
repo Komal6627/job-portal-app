@@ -1,13 +1,17 @@
 "use client";
 
-import { getCandidateDetailsByIdAction } from "@/actions";
+import {
+  getCandidateDetailsByIdAction,
+  updateJobApplicationAction,
+} from "@/actions";
 import { Button } from "../ui/button";
 import { Dialog, DialogContent, DialogFooter, DialogTitle } from "../ui/dialog";
 import { createClient } from "@supabase/supabase-js";
 
-
-const supabaseClient = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL,process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY)
-
+const supabaseClient = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL,
+  process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY
+);
 
 function CandidateList({
   jobApplications,
@@ -15,6 +19,7 @@ function CandidateList({
   setCurrentCandidateDetails,
   showCurrentCandidateDetailsModal,
   setShowCurrentCandidateDetailsModal,
+  setJobApplications,
 }) {
   async function handleFetchCandidateDetails(getCurrentCandidateId) {
     const data = await getCandidateDetailsByIdAction(getCurrentCandidateId);
@@ -30,9 +35,11 @@ function CandidateList({
   console.log(currentCandidateDetails);
 
   function handlePreviewResume() {
-    const {data} = supabaseClient.storage.from('job-board-app').getPublicUrl(currentCandidateDetails?.candidateInfo?.resume);
+    const { data } = supabaseClient.storage
+      .from("job-board-app")
+      .getPublicUrl(currentCandidateDetails?.candidateInfo?.resume);
 
-    const a = document.createElement('a');
+    const a = document.createElement("a");
 
     a.href = data?.publicUrl;
     a.setAttribute("download", "Resume.pdf");
@@ -43,20 +50,49 @@ function CandidateList({
     // console.log(data, 'resume');
   }
 
-  async function handleUpdateJobStatus(getCurrentStatus) {
-    let cpyJobApplicants = [...jobApplications];
-    const indexOfCurrentJobApplicant = cpyJobApplicants.findIndex(item =>item.candidateUserId === currentCandidateDetails?.userId);
+  // async function handleUpdateJobStatus(getCurrentStatus) {
+  //   let cpyJobApplicants = [...jobApplications];
+  //   const indexOfCurrentJobApplicant = cpyJobApplicants.findIndex(
+  //     (item) => item.candidateUserID === currentCandidateDetails?.userId
+  //   );
+  //   const jobApplicantsToUpdate = {
+  //     ...cpyJobApplicants[indexOfCurrentJobApplicant],
+  //     status:
+  //       cpyJobApplicants[indexOfCurrentJobApplicant].status.concat(
+  //         getCurrentStatus
+  //       ),
+  //   };
 
-    console.log(indexOfCurrentJobApplicant);
-    const jobApplicantsToUpdate = {
-      ...cpyJobApplicants[indexOfCurrentJobApplicant],
-      status : cpyJobApplicants[indexOfCurrentJobApplicant].status.concat(getCurrentStatus)
-    }
+  //   console.log(jobApplicantsToUpdate, "jobApplicantsToUpdate");
+  //   await updateJobApplicationAction(jobApplicantsToUpdate, "/jobs");
+  // }
 
-    console.log(jobApplicantsToUpdate, "jobApplicantsToUpdate");
-    
-    
+  async function handleUpdateJobStatus(newStatus) {
+    const index = jobApplications.findIndex(
+      (item) => item.candidateUserId === currentCandidateDetails?.userId
+    );
+    if (index === -1) return;
+
+    const oldStatuses = jobApplications[index].status || [];
+    const updatedStatuses = oldStatuses.includes(newStatus)
+      ? oldStatuses
+      : [...oldStatuses, newStatus];
+
+    const updatedApplication = {
+      ...jobApplications[index],
+      status: updatedStatuses,
+    };
+
+    // Update local state first so UI re-renders
+    const newJobApplications = [...jobApplications];
+    newJobApplications[index] = updatedApplication;
+    setJobApplications(newJobApplications);
+
+    // Then update backend
+    await updateJobApplicationAction(updatedApplication, "/jobs");
   }
+
+  console.log(jobApplications, jobApplications);
 
   return (
     <>
@@ -156,17 +192,55 @@ function CandidateList({
                 ))}
             </div>
           </div>
-           <DialogFooter>
-          <div className="flex gap-3">
-              <Button onClick={handlePreviewResume}  className="disabled:opacity-60 flex h-11 items-center justify-center px-5 bg-violet-600 text:white hover:bg-violet-700">
+          <DialogFooter>
+            <div className="flex gap-3">
+              <Button
+                onClick={handlePreviewResume}
+                className="disabled:opacity-60 flex h-11 items-center justify-center px-5 bg-violet-600 text:white hover:bg-violet-700"
+              >
                 Resume
               </Button>
-              <Button className="disabled:opacity-60 flex h-11 items-center justify-center px-5 bg-violet-600 text:white hover:bg-violet-700" onClick={() => handleUpdateJobStatus('selected')} >Select</Button>
-              <Button className="disabled:opacity-60 flex h-11 items-center justify-center px-5 bg-violet-600 text:white hover:bg-violet-700" onClick={() => handleUpdateJobStatus('rejected')}>Reject</Button>
-          </div>
-        </DialogFooter>
+
+
+              <Button
+              className="disabled:opacity-60 flex h-11 items-center justify-center px-5 bg-violet-600 text:white hover:bg-violet-700"
+                onClick={() => handleUpdateJobStatus("selected")}
+                disabled={
+                  jobApplications
+                    .find(
+                      (item) =>
+                        item.candidateUserId === currentCandidateDetails?.userId
+                    )
+                    ?.status.includes("selected") ||
+                  jobApplications
+                    .find(
+                      (item) =>
+                        item.candidateUserId === currentCandidateDetails?.userId
+                    )
+                    ?.status.includes("rejected")
+                    ? true
+                    : false
+                }
+              >
+                {jobApplications
+                  .find(
+                    (item) =>
+                      item.candidateUserId === currentCandidateDetails?.userId
+                  )
+                  ?.status.includes("selected")
+                  ? "Selected"
+                  : "Select"}
+              </Button>
+
+              <Button
+                className="disabled:opacity-60 flex h-11 items-center justify-center px-5 bg-violet-600 text:white hover:bg-violet-700"
+                onClick={() => handleUpdateJobStatus("rejected")}
+              >
+                Reject
+              </Button>
+            </div>
+          </DialogFooter>
         </DialogContent>
-       
       </Dialog>
     </>
   );

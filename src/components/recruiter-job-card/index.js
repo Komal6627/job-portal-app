@@ -9,6 +9,7 @@ import JobApplications from "../job-applicants";
 function RecruiterJobCard({ jobItem, jobApplications }) {
   console.log(jobApplications, "jobApplications for recruiter");
 
+  const [localJobApplications, setLocalJobApplications] = useState(jobApplications);
   const [showApplicantsDrawer, setShowApplicantsDrawer] = useState(false);
   const [currentCandidateDetails, setCurrentCandidateDetails] = useState(null);
   const [
@@ -55,6 +56,7 @@ function RecruiterJobCard({ jobItem, jobApplications }) {
         jobApplications={jobApplications.filter(
           (jobApplicantItem) => jobApplicantItem.jobId === jobItem?._id
         )}
+         setJobApplications={setLocalJobApplications}
       />
     </div>
   );

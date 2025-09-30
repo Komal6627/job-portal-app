@@ -5,7 +5,7 @@ const ApplicationSchema = new mongoose.Schema({
   name: String,
   email: String,
   candidateUserId: String,
-  status: [String],
+  status: Array,
   jobId: String,
   jobAppliedDate: String,
 });
