@@ -235,8 +235,31 @@ function CandidateList({
               <Button
                 className="disabled:opacity-60 flex h-11 items-center justify-center px-5 bg-violet-600 text:white hover:bg-violet-700"
                 onClick={() => handleUpdateJobStatus("rejected")}
+                 disabled={
+                jobApplications
+                  .find(
+                    (item) =>
+                      item.candidateUserId === currentCandidateDetails?.userId
+                  )
+                  ?.status.includes("selected") ||
+                jobApplications
+                  .find(
+                    (item) =>
+                      item.candidateUserId === currentCandidateDetails?.userId
+                  )
+                  ?.status.includes("rejected")
+                  ? true
+                  : false
+              }
               >
-                Reject
+                 {jobApplications
+                  .find(
+                    (item) =>
+                      item.candidateUserId === currentCandidateDetails?.userId
+                  )
+                  ?.status.includes("rejected")
+                  ? "Rejected"
+                  : "Reject"}
               </Button>
             </div>
           </DialogFooter>
