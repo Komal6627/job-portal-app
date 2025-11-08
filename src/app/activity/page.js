@@ -10,9 +10,10 @@ export default async  function Activity() {
 
 return <>
     <CandidateActivity
-    jobList={jobList}
-    jobApplicants={jobApplicants}
+     jobList={JSON.parse(JSON.stringify(jobList))}
+     jobApplicants={JSON.parse(JSON.stringify(jobApplicants))}
     />
 </>
 }
 
+ 
