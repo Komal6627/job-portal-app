@@ -118,4 +118,12 @@ export async  function getCandidateDetailsByIdAction(currentCandidateId) {
     return JSON.parse(JSON.stringify(result));
 }
 
-//Create 
+//Create filter category
+export async function createFilterCategoryAction() {
+  await connectToDB()
+  const result = await Job.find({})
+
+  return JSON.parse(JSON.stringify(result));
+
+  
+}
