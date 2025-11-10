@@ -9,7 +9,9 @@ import {
 import JobListing from "@/components/job-listing";
 import { currentUser } from "@clerk/nextjs/server";
 
-async function JobsPage() {
+async function JobsPage({searchParams}) {
+  console.log(searchParams, "searchparams");
+  
   const user = await currentUser();
   const profileInfo = await fetchProfileAction(user?.id);
 

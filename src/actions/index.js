@@ -61,9 +61,9 @@ export async function createJobApplicationAction(data, pathToRevalidate) {
 
 //fetch job application - candidate
 export async function fetchJobApplicationForCandidate(userId) {
-  console.log("Querying with candidateUserId:", userId);
+  // console.log("Querying with candidateUserId:", userId);
   const applications = await Application.find({ candidateUserId: userId });
-  console.log("Applications fetched:", applications);
+  // console.log("Applications fetched:", applications);
   return applications;
 }
 

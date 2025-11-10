@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IoMdCheckmark } from "react-icons/io"; 
-import { filterMenuDataArray } from "@/utils";
+import { filterMenuDataArray, formURLQuery } from "@/utils";
 import CandidateJobCard from "../candidate-job-card";
 import PostNewJob from "../post-new-job";
 import RecruiterJobCard from "../recruiter-job-card";
@@ -14,6 +14,7 @@ import {
   MenubarTrigger,
 } from "../ui/menubar";
 import { Label } from "../ui/label";
+import { useRouter, useSearchParams} from "next/navigation";
 
 function JobListing({
   user,
@@ -23,7 +24,9 @@ function JobListing({
   filterCategories,
 }) {
   const [filterParams, setFilterParams] = useState({});
-
+  const searchParams = useSearchParams()
+  const router = useRouter()
+  
 
   function handleFilter(getSectionId, getCurrentOption) {
     let cpyFilterparams = { ...filterParams };
@@ -50,6 +53,21 @@ function JobListing({
     setFilterParams(cpyFilterparams);
     sessionStorage.setItem("filterParams", JSON.stringify(cpyFilterparams));
   }
+
+  useEffect(() => {
+    setFilterParams(JSON.parse(sessionStorage.getItem('filterParams')))
+  },[])
+
+  useEffect(() => {
+      if(filterParams && Object.keys(filterParams).length > 0){
+          let url = '';
+          url = formURLQuery({
+               params: searchParams.toString(),
+               dataToAdd : filterParams
+        })
+        router.push(url, {scroll : false})
+      }
+  }, [filterParams, searchParams])
 
   const filterMenus = filterMenuDataArray.map((item) => ({
     id: item.id,
