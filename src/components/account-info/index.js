@@ -1,12 +1,12 @@
 "use client";
 
-import { initialCandidateFormData, initialRecruiterFormData, candidateOnboardFormControls, recruiterOnboardFormControls} from "@/utils";
+import { candidateOnboardFormControls, initialCandidateAccountFormData, initialCandidateFormData, initialRecruiterFormData, recruiterOnboardFormControls} from "@/utils";
 import { useEffect, useState } from "react";
 import CommonForm from "../common-form";
 
 function AccountInfo({ profileInfo }) {
   const [candidateFormData, setCandidateFormData] = useState(
-    initialCandidateFormData
+    initialCandidateAccountFormData
   );
 
   const [recruiterFormData, setRecruiterFormData] = useState(
@@ -35,15 +35,19 @@ function AccountInfo({ profileInfo }) {
         <div className="container mx-auto p-0 space-y-8">
           <CommonForm
             formControls={
-              profileInfo?.role === "candidate"
-                ? candidateOnboardFormControls
-                : recruiterOnboardFormControls
+              profileInfo?.role === "candidate" ?
+              candidateOnboardFormControls
+              .filter(formControls => formControls.name !== 'resume') 
+              : recruiterOnboardFormControls
+              
             }
             formData={
-              profileInfo?.role === "candidate"
-                ? candidateFormData
-                : recruiterFormData
+              profileInfo?.role === "candidate" ? candidateFormData : recruiterFormData
             }
+            setFormData={
+              profileInfo?.role === "candidate" ? setCandidateFormData : setRecruiterFormData
+            }
+            buttonText="Update Profile"
           />
         </div>
       </div>
