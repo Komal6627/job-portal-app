@@ -1,8 +1,16 @@
 "use client";
 
-import { candidateOnboardFormControls, initialCandidateAccountFormData, initialCandidateFormData, initialRecruiterFormData, recruiterOnboardFormControls} from "@/utils";
+import {
+  candidateOnboardFormControls,
+  initialCandidateAccountFormData,
+  initialCandidateFormData,
+  initialRecruiterFormData,
+  recruiterOnboardFormControls,
+} from "@/utils";
 import { useEffect, useState } from "react";
 import CommonForm from "../common-form";
+import { updateProfileAction } from "@/actions";
+import { resume } from "react-dom/server";
 
 function AccountInfo({ profileInfo }) {
   const [candidateFormData, setCandidateFormData] = useState(
@@ -21,7 +29,42 @@ function AccountInfo({ profileInfo }) {
       setCandidateFormData(profileInfo?.candidateInfo);
   }, [profileInfo]);
 
-  console.log(candidateFormData, recruiterFormData, "acountpage");
+  console.log(candidateFormData, "candidateformdata");
+  console.log(profileInfo, "acountpage");
+
+  async function handleUpdateAccount() {
+    await updateProfileAction(
+      profileInfo?.role === "candidate"
+        ? {
+           _id : profileInfo?._id,
+            userId: profileInfo?.userId,
+            role: profileInfo?.role,
+            email: profileInfo?.email,
+            isPremiumUser: profileInfo?.isPremiumUser,
+            memberShipType: profileInfo?.memberShipType,
+            memberShipStartDate: profileInfo?.memberShipStartDate,
+            memberShipEndDate: profileInfo?.memberShipEndDate,
+            candidateInfo: {
+              ...candidateFormData,
+              resume: profileInfo?.candidateInfo?.resume,
+            },
+          }
+        : {
+           _id : profileInfo?._id,
+           userId: profileInfo?.userId,
+            role: profileInfo?.role,
+            email: profileInfo?.email,
+            isPremiumUser: profileInfo?.isPremiumUser,
+            memberShipType: profileInfo?.memberShipType,
+            memberShipStartDate: profileInfo?.memberShipStartDate,
+            memberShipEndDate: profileInfo?.memberShipEndDate,
+            recruiterInfo: {
+              ...recruiterFormData,
+            },
+        },
+      "/account"
+    );
+  }
 
   return (
     <div className="mx-auto max-w-7xl">
@@ -34,18 +77,23 @@ function AccountInfo({ profileInfo }) {
       <div className="py-20 pb-24 pt-6">
         <div className="container mx-auto p-0 space-y-8">
           <CommonForm
+            action={handleUpdateAccount}
             formControls={
-              profileInfo?.role === "candidate" ?
-              candidateOnboardFormControls
-              .filter(formControls => formControls.name !== 'resume') 
-              : recruiterOnboardFormControls
-              
+              profileInfo?.role === "candidate"
+                ? candidateOnboardFormControls.filter(
+                    (formControls) => formControls.name !== "resume"
+                  )
+                : recruiterOnboardFormControls
             }
             formData={
-              profileInfo?.role === "candidate" ? candidateFormData : recruiterFormData
+              profileInfo?.role === "candidate"
+                ? candidateFormData
+                : recruiterFormData
             }
             setFormData={
-              profileInfo?.role === "candidate" ? setCandidateFormData : setRecruiterFormData
+              profileInfo?.role === "candidate"
+                ? setCandidateFormData
+                : setRecruiterFormData
             }
             buttonText="Update Profile"
           />
