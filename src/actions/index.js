@@ -6,6 +6,16 @@ import Job from "@/models/job";
 import Profile from "@/models/profile";
 import { revalidatePath } from "next/cache";
 
+
+
+
+import { createClient } from "@supabase/supabase-js";
+
+
+// import { revalidatePath } from "next/cache";
+
+
+
 //create profile  action
 export async function createProfileAction(formData, pathToRevalidate) {
     await connectToDB();
@@ -148,4 +158,8 @@ export async function updateProfileAction(data, pathToRevalidate) {
   })
   revalidatePath(pathToRevalidate)
 }
+
+
+
+
 

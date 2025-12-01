@@ -60,22 +60,41 @@ function CommonForm({
         )
         break
 
-        case "file":
-            content = (
-          <Label
-            htmlFor={getCurrentControl.name}
-            className="flex bg-gray-100 dark:bg-black items-center px-3 py-3 mx-auto mt-6 text-center border-2 border-dashed rounded-lg cursor-pointer"
-          >
-            <h2>{getCurrentControl.label}</h2>
-            <Input
-              onChange={handleFileChange}
-              id={getCurrentControl.name}
-              type="file"
-            />
-          </Label>
-        );
+        // case "file":
+        //     content = (
+        //   <Label
+        //     htmlFor={getCurrentControl.name}
+        //     className="flex bg-gray-100 dark:bg-black items-center px-3 py-3 mx-auto mt-6 text-center border-2 border-dashed rounded-lg cursor-pointer"
+        //   >
+        //     <h2>{getCurrentControl.label}</h2>
+        //     <Input
+        //       onChange={handleFileChange}
+        //       id={getCurrentControl.name}
+        //       type="file"
+        //     />
+        //   </Label>
+        // );
 
-            break;
+        //     break;
+
+
+        case "file":
+  content = (
+    <Label
+      htmlFor={getCurrentControl.name}
+      className="flex bg-gray-100 dark:bg-black items-center px-3 py-3 mx-auto mt-6 text-center border-2 border-dashed rounded-lg cursor-pointer"
+    >
+      <h2>{getCurrentControl.label}</h2>
+      <Input
+        id={getCurrentControl.name}
+        type="file"
+        onChange={(e) => handleFileChange && handleFileChange(e.target.files[0])}
+        // className="hidden"
+      />
+    </Label>
+  );
+  break;
+
 
       default:
          content = (

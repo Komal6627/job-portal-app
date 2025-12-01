@@ -10,16 +10,22 @@ import {
 import { useEffect, useState } from "react";
 import CommonForm from "../common-form";
 import { updateProfileAction } from "@/actions";
-import { resume } from "react-dom/server";
+import { createClient } from "@supabase/supabase-js";
 
+const supabaseClient = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL,process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY)
 function AccountInfo({ profileInfo }) {
-  const [candidateFormData, setCandidateFormData] = useState(
-    initialCandidateAccountFormData
-  );
+const [candidateFormData, setCandidateFormData] = useState(
+  profileInfo?.candidateInfo
+    ? { ...initialCandidateFormData, ...profileInfo.candidateInfo }
+    : initialCandidateFormData
+);
 
-  const [recruiterFormData, setRecruiterFormData] = useState(
-    initialRecruiterFormData
-  );
+const [recruiterFormData, setRecruiterFormData] = useState(
+  profileInfo?.recruiterInfo
+    ? { ...initialRecruiterFormData, ...profileInfo.recruiterInfo }
+    : initialRecruiterFormData
+);
+
 
   useEffect(() => {
     if (profileInfo?.role === "recruiter")
@@ -32,39 +38,62 @@ function AccountInfo({ profileInfo }) {
   console.log(candidateFormData, "candidateformdata");
   console.log(profileInfo, "acountpage");
 
-  async function handleUpdateAccount() {
-    await updateProfileAction(
-      profileInfo?.role === "candidate"
-        ? {
-           _id : profileInfo?._id,
-            userId: profileInfo?.userId,
-            role: profileInfo?.role,
-            email: profileInfo?.email,
-            isPremiumUser: profileInfo?.isPremiumUser,
-            memberShipType: profileInfo?.memberShipType,
-            memberShipStartDate: profileInfo?.memberShipStartDate,
-            memberShipEndDate: profileInfo?.memberShipEndDate,
-            candidateInfo: {
-              ...candidateFormData,
-              resume: profileInfo?.candidateInfo?.resume,
-            },
-          }
-        : {
-           _id : profileInfo?._id,
-           userId: profileInfo?.userId,
-            role: profileInfo?.role,
-            email: profileInfo?.email,
-            isPremiumUser: profileInfo?.isPremiumUser,
-            memberShipType: profileInfo?.memberShipType,
-            memberShipStartDate: profileInfo?.memberShipStartDate,
-            memberShipEndDate: profileInfo?.memberShipEndDate,
-            recruiterInfo: {
-              ...recruiterFormData,
-            },
-        },
-      "/account"
-    );
+async function handleResumeUpload(file) {
+  console.log({file});
+  
+  const filePath = `public/${file.name}`;
+
+  const { data, error } = await supabaseClient.storage
+    .from("job-board-app")
+    .upload(filePath, file, { cacheControl: "3600", upsert: false });
+   console.log({data, error});
+   
+  if (!error && data) {
+    setCandidateFormData(() => ({
+      ...candidateFormData,
+      resume: data.path, // <-- important! store path here
+    }));
+  } else {
+    console.error("Resume upload error:", error);
   }
+}
+
+
+async function handleUpdateAccount() {
+  const updatedData =
+    profileInfo?.role === "candidate"
+      ? {
+          _id: profileInfo?._id,
+          userId: profileInfo?.userId,
+          role: profileInfo?.role,
+          email: profileInfo?.email,
+          isPremiumUser: profileInfo?.isPremiumUser,
+          memberShipType: profileInfo?.memberShipType,
+          memberShipStartDate: profileInfo?.memberShipStartDate,
+          memberShipEndDate: profileInfo?.memberShipEndDate,
+          candidateInfo: {
+            ...candidateFormData,
+            // use the updated resume from candidateFormData
+            resume: candidateFormData.resume,
+          },
+        }
+      : {
+          _id: profileInfo?._id,
+          userId: profileInfo?.userId,
+          role: profileInfo?.role,
+          email: profileInfo?.email,
+          isPremiumUser: profileInfo?.isPremiumUser,
+          memberShipType: profileInfo?.memberShipType,
+          memberShipStartDate: profileInfo?.memberShipStartDate,
+          memberShipEndDate: profileInfo?.memberShipEndDate,
+          recruiterInfo: {
+            ...recruiterFormData,
+          },
+        };
+console.log({updatedData});
+
+   await updateProfileAction(updatedData, "/account");
+}
 
   return (
     <div className="mx-auto max-w-7xl">
@@ -80,9 +109,7 @@ function AccountInfo({ profileInfo }) {
             action={handleUpdateAccount}
             formControls={
               profileInfo?.role === "candidate"
-                ? candidateOnboardFormControls.filter(
-                    (formControls) => formControls.name !== "resume"
-                  )
+                ? candidateOnboardFormControls
                 : recruiterOnboardFormControls
             }
             formData={
@@ -96,6 +123,7 @@ function AccountInfo({ profileInfo }) {
                 : setRecruiterFormData
             }
             buttonText="Update Profile"
+            handleFileChange={(file) => handleResumeUpload(file)}
           />
         </div>
       </div>

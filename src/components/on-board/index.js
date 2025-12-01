@@ -40,6 +40,7 @@ function OnBoard() {
   }
 
   async function handleUploadPdfToSupabase() {
+
   const { data, error } = await supabaseClient
   .storage
   .from('job-board-app')
