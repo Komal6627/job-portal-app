@@ -89,7 +89,6 @@ function CommonForm({
         id={getCurrentControl.name}
         type="file"
         onChange={(e) => handleFileChange && handleFileChange(e.target.files[0])}
-        // className="hidden"
       />
     </Label>
   );
