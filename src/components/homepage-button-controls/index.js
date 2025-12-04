@@ -1,20 +1,34 @@
-"use Client";
+"use client";
+
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 function HomePageButtonControls( {user,profileInfo}) {
+
+  const router = useRouter()
+
+  useEffect(() => {
+      router.refresh()
+  },[])
+
   return (
     <div className="flex space-x-4">
       <Button
-        href={"/jobs"}
+       onClick={() => router.push('/jobs')}
         className="flex h-11 items-center justify-center px-5 bg-violet-600 text:white hover:bg-violet-700"
       >
-        Browse Job
+       {
+          user ? profileInfo.role === 'candidate' ? 'Browse Jobs' : 'Jobs Dashboard' : 'Find Jobs'
+        }
       </Button>
       <Button
-        href={"/jobs"}
+          onClick={() => router.push( user ? profileInfo.role === 'candidate' ? '/activity' : '/jobs' : '/jobs')}
         className="flex h-11 items-center justify-center px-5 bg-violet-600 text:white hover:bg-violet-700"
       >
-        Post New Job
+        {
+          user ? profileInfo.role === 'candidate' ? 'Your Activity' : 'Post New Job' : 'Post New Job'
+        }
       </Button>
     </div>
   );
